@@ -1,0 +1,17 @@
+{
+  "name": "rsa-binary-cryptosystem",
+  "version": "1.0.0",
+  "description": "Standalone RSA engine for binary data encryption",
+  "main": "src/index.ts",
+  "scripts": {
+    "encrypt": "ts-node src/index.ts encrypt",
+    "decrypt": "ts-node src/index.ts decrypt",
+    "build": "esbuild src/browser_app.ts --bundle --outfile=dist/bundle.js --platform=browser",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "esbuild": "^0.20.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}
