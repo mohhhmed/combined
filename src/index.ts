@@ -1,6 +1,5 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { genPrimeArr } from './core/genPrimeArr';
 import { genRandomPrimes } from './core/genRandomPrimes';
 import { generateE } from './core/generateE';
 import { extendedEuclidean } from './core/generateD';
@@ -28,26 +27,24 @@ async function main() {
         return;
     }
 
-    // --- Key Generation (for demo purposes we generate keys every time) ---
-    // In a real app, you would save/load these.
-    console.log("Generating RSA Keys (this may take a moment)...");
-    const primeArr = genPrimeArr(104729); // Use a larger prime bit for security (104729 is the 10,000th prime)
-    const [p, q] = genRandomPrimes(primeArr);
-    const n = BigInt(p) * BigInt(q);
-    const phiN = BigInt(p - 1) * BigInt(q - 1);
-    const e = BigInt(generateE(Number(n), Number(phiN)));
+    // --- Key Generation ---
+    console.log("Generating RSA-2048 Keys (this may take a minute)...");
+    const [p, q] = genRandomPrimes(1024);
+    const n = p * q;
+    const phiN = (p - BigInt(1)) * (q - BigInt(1));
+    const e = generateE(phiN);
 
     // Re-use extendedEuclidean to get D and CRT parameters
-    const [gcdE, dValue, _] = extendedEuclidean(Number(e), Number(phiN));
-    if (gcdE !== 1) throw new Error("e and phiN are not coprime");
-    const d = (BigInt(dValue) % phiN + phiN) % phiN;
+    const [gcdE, dValue, _] = extendedEuclidean(e, phiN);
+    if (gcdE !== BigInt(1)) throw new Error("e and phiN are not coprime");
+    const d = (dValue % phiN + phiN) % phiN;
 
     // CRT Parameters
-    const dp = d % BigInt(p - 1);
-    const dq = d % BigInt(q - 1);
+    const dp = d % (p - BigInt(1));
+    const dq = d % (q - BigInt(1));
     const [gcdQ, qInvValue, _q] = extendedEuclidean(q, p);
-    if (gcdQ !== 1) throw new Error("q and p are not coprime");
-    const qInv = (BigInt(qInvValue) % BigInt(p) + BigInt(p)) % BigInt(p);
+    if (gcdQ !== BigInt(1)) throw new Error("q and p are not coprime");
+    const qInv = (qInvValue % p + p) % p;
 
     console.log(`Public Key (E, N): (${e}, ${n})`);
     console.log(`Private Key (D): ${d}`);

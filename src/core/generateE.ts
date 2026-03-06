@@ -1,26 +1,32 @@
 import { gcd } from './gcd';
+import { randomBigInt } from './bigIntUtils';
 
-export const generateE = (N: number, phiN: number): number => {
-    const generateAndCheckE = (): number | null => {
-        let findE = Math.floor(Math.random() * (phiN - 2) + 2);
+/**
+ * Generates a random Public Exponent E.
+ * E must be coprime to phiN and 1 < E < phiN.
+ */
+export const generateE = (phiN: bigint): bigint => {
+    // Generate a random E. We'll use 64 bits to keep it secure but relatively fast.
+    let attempts = 0;
+    while (attempts < 1000) {
+        // Generate random BigInt, ensure it's in range [3, phiN-1]
+        let e = randomBigInt(64) % (phiN - BigInt(3)) + BigInt(3);
 
-        // Start looking for a valid E from the generated findE downwards
-        while (findE > 2) {
-            if (gcd(findE, N) === 1 && gcd(findE, phiN) === 1) {
-                return findE;
-            }
-            findE--;
+        // Ensure e is odd (even E cannot be coprime to phiN since phiN is even)
+        if (e % BigInt(2) === BigInt(0)) e += BigInt(1);
+
+        if (gcd(e, phiN) === BigInt(1)) {
+            return e;
         }
-
-        // If we exit the loop, it means no valid E was found
-        return null;
-    };
-
-    // Keep trying to generate E until a valid one is found
-    let E: number | null = null;
-    while (E === null) {
-        E = generateAndCheckE();
+        attempts++;
     }
 
-    return E;
+    // Fallback search if random search fails
+    let fallbackE = BigInt(65537);
+    while (fallbackE < phiN) {
+        if (gcd(fallbackE, phiN) === BigInt(1)) return fallbackE;
+        fallbackE += BigInt(2);
+    }
+
+    throw new Error("Could not find a valid E");
 };

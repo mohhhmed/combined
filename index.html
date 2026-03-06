@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RSA Binary Cryptosystem</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@300;400;600;800&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             --primary: #6366f1;
@@ -26,7 +29,7 @@
         body {
             font-family: 'Outfit', sans-serif;
             background-color: var(--bg-dark);
-            background-image: 
+            background-image:
                 radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
                 radial-gradient(circle at 90% 80%, rgba(236, 72, 153, 0.15) 0%, transparent 40%);
             color: var(--text-main);
@@ -57,6 +60,7 @@
             font-size: 2.5rem;
             margin-bottom: 0.5rem;
             background: linear-gradient(to right, #818cf8, #f472b6);
+            background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             text-align: center;
@@ -184,7 +188,9 @@
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         footer {
@@ -195,6 +201,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="card">
@@ -226,15 +233,86 @@
                 <div class="file-input-wrapper">
                     <input type="file" id="decryptInput">
                 </div>
-                <p style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 0.5rem;">Upload the .keys.json file</p>
+                <p style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 0.5rem;">Upload the .keys.json file
+                </p>
                 <div class="file-input-wrapper">
                     <input type="file" id="keyInput">
                 </div>
-                <button id="decryptBtn" class="btn-primary" style="background: linear-gradient(135deg, #ec4899, #f43f5e);">
+                <button id="decryptBtn" class="btn-primary"
+                    style="background: linear-gradient(135deg, #ec4899, #f43f5e);">
                     <span class="loader" id="decryptLoader"></span>
                     <span>Decrypt & Restore</span>
                 </button>
-                <div id="decryptStatus" class="status" style="background: rgba(99, 102, 241, 0.1); color: #818cf8; border-color: rgba(99, 102, 241, 0.2);">Decryption Complete! File restored.</div>
+                <div id="decryptStatus" class="status"
+                    style="background: rgba(99, 102, 241, 0.1); color: #818cf8; border-color: rgba(99, 102, 241, 0.2);">
+                    Decryption Complete! File restored.</div>
+            </div>
+
+            <!-- Hashing Step -->
+            <div class="section">
+                <div class="section-header" style="color: #10b981;">
+                    <span>3. Hash File (SHA-256)</span>
+                </div>
+                <p style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 0.5rem;">Upload any file to
+                    calculate its SHA-256 hash</p>
+                <div class="file-input-wrapper">
+                    <input type="file" id="hashInput">
+                </div>
+                <button id="hashBtn" class="btn-primary" style="background: linear-gradient(135deg, #10b981, #3b82f6);">
+                    <span class="loader" id="hashLoader"></span>
+                    <span>Calculate Hash</span>
+                </button>
+                <div id="hashOutput" class="keys-display" style="color: #3b82f6; word-break: break-all;"></div>
+            </div>
+
+            <!-- Signing Step -->
+            <div class="section">
+                <div class="section-header" style="color: #f59e0b;">
+                    <span>4. Sign File</span>
+                </div>
+                <p style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 0.5rem;">Upload the file to sign</p>
+                <div class="file-input-wrapper">
+                    <input type="file" id="signInput">
+                </div>
+                <p style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 0.5rem;">Upload the .keys.json file
+                    (Private Key)</p>
+                <div class="file-input-wrapper">
+                    <input type="file" id="signKeyInput">
+                </div>
+                <button id="signBtn" class="btn-primary" style="background: linear-gradient(135deg, #f59e0b, #ef4444);">
+                    <span class="loader" id="signLoader"></span>
+                    <span>Sign & Download .sig</span>
+                </button>
+                <div id="signStatus" class="status"
+                    style="background: rgba(245, 158, 11, 0.1); color: #f59e0b; border-color: rgba(245, 158, 11, 0.2);">
+                    Signature generated! Check downloads.</div>
+            </div>
+
+            <!-- Verification Step -->
+            <div class="section">
+                <div class="section-header" style="color: #8b5cf6;">
+                    <span>5. Verify Signature</span>
+                </div>
+                <p style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 0.5rem;">Upload the original file
+                </p>
+                <div class="file-input-wrapper">
+                    <input type="file" id="verifyInput">
+                </div>
+                <p style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 0.5rem;">Upload the .sig file</p>
+                <div class="file-input-wrapper">
+                    <input type="file" id="verifySigInput">
+                </div>
+                <p style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 0.5rem;">Upload the .keys.json file
+                    (Public Key)</p>
+                <div class="file-input-wrapper">
+                    <input type="file" id="verifyKeyInput">
+                </div>
+                <button id="verifyBtn" class="btn-primary"
+                    style="background: linear-gradient(135deg, #8b5cf6, #3b82f6);">
+                    <span class="loader" id="verifyLoader"></span>
+                    <span>Verify Authenticity</span>
+                </button>
+                <div id="verifyStatus" class="status"></div>
             </div>
         </div>
         <footer>
@@ -244,4 +322,5 @@
 
     <script src="dist/bundle.js"></script>
 </body>
+
 </html>

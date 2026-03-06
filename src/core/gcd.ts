@@ -1,7 +1,7 @@
-export const gcd = (a: number, b: number): number => {
+export const gcd = (a: bigint, b: bigint): bigint => {
     if (!b) {
         return a;
     }
-    let aModB: number = a % b;
+    let aModB: bigint = a % b;
     return gcd(b, aModB);
 };
