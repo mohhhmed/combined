@@ -58,3 +58,31 @@ This implementation strictly follows the RSA concept:
 
 Data is processed in chunks smaller than $N$ to ensure mathematical validity.
 
+##  Testing with my-react-app
+The frontend is built with React and integrated with the core RSA logic located in `src/core`.
+
+### Steps to Run the Frontend
+1. Navigate to the frontend directory:
+   ```bash
+   cd my-react-app
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
+4. Open the application in your browser (usually `http://localhost:5173`).
+
+### How to Test the Cryptographic Flow
+1. **Register/Login**: Creating a new account generates two unique RSA-2048 key pairs with full CRT parameters.
+2. **Secure Upload**: 
+   - Select a file to "Upload".
+   - The app uses `src/core` to encrypt and sign the data.
+   - A `.rsa.json` bundle is automatically saved to your **Desktop**.
+3. **Secure Download**: 
+   - Click the "Download" icon in the list.
+   - The app verifies the signature and uses the CRT-optimized decryption from `src/core` to restore the original file.
+4. **Verification**: Check your browser console (F12) to see the step-by-step cryptographic logs!
