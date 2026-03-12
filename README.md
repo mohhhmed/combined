@@ -1,4 +1,4 @@
-# RSA Binary Cryptosystem (Headless)
+# RSA Binary Cryptosystem 
 
 This project is a standalone RSA engine that can encrypt and decrypt **any type of data** (files, images, binaries) using pure mathematical RSA logic. 
 
